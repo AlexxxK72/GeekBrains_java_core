@@ -25,7 +25,7 @@ public class PhoneRecord {
         this.phone = phone;
     }
 
-    @Override
+    //@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -35,7 +35,6 @@ public class PhoneRecord {
         if (!getsName().equals(that.getsName())) return false;
         return getPhone().equals(that.getPhone());
     }
-
     @Override
     public int hashCode() {
         int result = getsName().hashCode();
