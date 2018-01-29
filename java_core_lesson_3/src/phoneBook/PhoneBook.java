@@ -21,9 +21,11 @@ public class PhoneBook {
     public ArrayList<String> getPhones(String sName){
         ArrayList<String> lPhones = new ArrayList<>();
         int userId = getUserId(sName);
-        listPhone.forEach((k, v) -> {
-            if(v == userId) lPhones.add(k);
-        });
+        if(userId < listUser.size()){
+            listPhone.forEach((k, v) -> {
+                if(v == userId) lPhones.add(k);
+            });
+        }
         return lPhones;
     }
 
