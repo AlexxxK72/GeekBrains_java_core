@@ -11,7 +11,7 @@ public class Main {
     }
 
     public static long onePassArr(){
-        arr = getArray();
+        setArray();
         long m = System.currentTimeMillis();
         for (int i = 0; i < arr.length; i++) {
             arr[i] = (float)(arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
@@ -20,7 +20,7 @@ public class Main {
     }
 
     public static long twoPassArr(){
-        arr = getArray();
+        setArray();
         long m = System.currentTimeMillis();
         float[] arr1 = new float[h];
         float[] arr2 = new float[h];
@@ -57,10 +57,9 @@ public class Main {
         return System.currentTimeMillis() - m;
     }
 
-    public static float[] getArray(){
+    public static void setArray(){
         for (int i = 0; i < size; i++) {
             arr[i] = 1.0f;
         }
-        return arr;
     }
 }
