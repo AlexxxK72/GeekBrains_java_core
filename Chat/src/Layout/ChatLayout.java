@@ -21,12 +21,12 @@ public class ChatLayout extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         jText = new JTextArea();
-        jText.setPreferredSize(new Dimension(400, 350));
         jText.setEditable(false);
         jText.setLineWrap(true);
         jText.setBackground(new Color(255, 248, 220));
         jText.setForeground(new Color(128, 0, 0));
         JScrollPane scroll = new JScrollPane(jText);
+        scroll.setPreferredSize(new Dimension(400, 350));
         add(scroll, BorderLayout.CENTER);
         jPanel = new JPanel();
         jPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
