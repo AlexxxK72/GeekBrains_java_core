@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+
+<TitledPane
+        alignment="center"
+        maxHeight="400.0" maxWidth="400.0"
+        minHeight="400.0" minWidth="400.0"
+        prefHeight="400.0" prefWidth="400.0"
+        xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller"
+        collapsible="false"  text="iChat" >
+
+      <BorderPane>
+         <top>
+            <HBox prefHeight="24.0" prefWidth="379.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField />
+                  <PasswordField prefHeight="31.0" prefWidth="112.0" />
+                  <Button id="btnLogin" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Button" />
+               </children>
+            </HBox>
+         </top>
+         <right>
+            <VBox prefHeight="333.0" prefWidth="102.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ListView prefHeight="321.0" prefWidth="102.0" />
+               </children>
+            </VBox>
+         </right>
+         <bottom>
+            <HBox prefHeight="27.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField id="txtInput" prefHeight="25.0" prefWidth="301.0" />
+                  <Button id="btnSend" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Button" />
+               </children>
+            </HBox>
+         </bottom>
+         <center>
+            <TextArea id="txtChat" prefHeight="313.0" prefWidth="300.0" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+
+</TitledPane>

@@ -6,4 +6,5 @@ public interface Server_API {
     String AUTH = "/auth";
     String AUTH_SUCCESSFUL = "/authok";
     String UNICAST = "/w";
+    String USERS_LIST = "/users";
 }

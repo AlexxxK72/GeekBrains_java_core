@@ -1,15 +1,14 @@
 package client;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class ChatWindow extends JFrame {
     JTextArea jText;
+    JTextArea usersList;
+    JTextField authTime;
     JPanel input;
     JTextField jInput;
     JButton btnSend;
@@ -17,44 +16,57 @@ public class ChatWindow extends JFrame {
     JPasswordField password;
     JPanel authPanel;
     ClientConnection clientConnection;
+    private Boolean timeoutAuth;
+    private long time;
 
 
     public ChatWindow(){
         clientConnection = new ClientConnection();
-        clientConnection.init(this);
+        timeoutAuth = false;
 
         setTitle("myChat");
-        setSize(new Dimension(400, 350));
+        setSize(new Dimension(400, 400));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
         login = new JTextField();
         password = new JPasswordField();
         JButton auth = new JButton("Login");
-        auth.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                auth();
-            }
-        });
+        auth.setBackground(new Color(255, 248, 220));
+        auth.setForeground(new Color(46, 139, 87));
+        auth.addActionListener(e -> auth());
         authPanel = new JPanel(new GridLayout(1, 3));
         authPanel.add(login);
         authPanel.add(password);
         authPanel.add(auth);
         add(authPanel, BorderLayout.NORTH);
+
+        JPanel infoPanel = new JPanel(new BorderLayout());
+        authTime = new JTextField();
+        authTime.setForeground(new Color(128, 0, 0));
+        authTime.setHorizontalAlignment(SwingConstants.CENTER);
+        usersList = new JTextArea();
+        usersList.setEditable(false);
+        usersList.setBackground(new Color(255, 248, 220));
+        usersList.setForeground(new Color(46, 139, 87));
+        JScrollPane scroll1 = new JScrollPane(usersList);
+        scroll1.setPreferredSize(new Dimension(128, 350));
+        infoPanel.add(authTime, BorderLayout.NORTH);
+        infoPanel.add(scroll1, BorderLayout.CENTER);
+        add(infoPanel, BorderLayout.EAST);
+
         jText = new JTextArea();
         jText.setEditable(false);
         jText.setLineWrap(true);
         jText.setBackground(new Color(255, 248, 220));
         jText.setForeground(new Color(128, 0, 0));
-        JScrollPane scroll = new JScrollPane(jText);
-        scroll.setPreferredSize(new Dimension(400, 350));
-        add(scroll, BorderLayout.CENTER);
+        JScrollPane scroll2 = new JScrollPane(jText);
+        add(scroll2, BorderLayout.CENTER);
+
         input = new JPanel();
-        input.setBorder(new EmptyBorder(5, 5, 5, 5));
-        input.setLayout(new FlowLayout());
-        input.setPreferredSize(new Dimension(400, 50));
+        input.setLayout(new BorderLayout());
+        input.setPreferredSize(new Dimension(400, 25));
         jInput = new JTextField();
-        jInput.setPreferredSize(new Dimension(250, 30));
         jInput.setBackground(new Color(255, 248, 220));
         jInput.setForeground(new Color(128, 0, 0));
         jInput.addKeyListener(new KeyListener() {
@@ -74,22 +86,22 @@ public class ChatWindow extends JFrame {
 
             }
         });
-        input.add(jInput);
+        input.add(jInput, BorderLayout.CENTER);
         btnSend = new JButton("Отправить");
         btnSend.setBackground(new Color(255, 248, 220));
         btnSend.setForeground(new Color(128, 0, 0));
-        btnSend.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sendMessage();
-            }
-        });
-        input.add(btnSend);
+        btnSend.setPreferredSize(new Dimension(128, 25));
+        btnSend.addActionListener(e -> sendMessage());
+        input.add(btnSend, BorderLayout.EAST);
         add(input, BorderLayout.SOUTH);
 
         switchPanel();
+
+
+
         setVisible(true);
     }
+
 
     public void sendMessage(){
         String message = jInput.getText();
@@ -98,9 +110,43 @@ public class ChatWindow extends JFrame {
     }
 
     public void auth(){
-        clientConnection.auth(login.getText(), new String(password.getPassword()));
-        login.setText("");
-        password.setText("");
+        if(!timeoutAuth) {
+            if (!clientConnection.isConnected()) {
+                clientConnection.init(this);
+
+                new Thread(() -> {
+                    time = System.currentTimeMillis();
+                    long timeCurrent = 0;
+                    while (timeCurrent < 120000 && !clientConnection.isAuthorized()) {
+                        try {
+                            Thread.sleep(1000);
+                            int min = (int) (timeCurrent / 60000);
+                            int sec = (int) (timeCurrent / 1000) - (min * 60);
+                            authTime.setText(String.format("%02d:%02d", min, sec));
+                            timeCurrent = System.currentTimeMillis() - time;
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (clientConnection.isAuthorized()) authTime.setText("Auth Ok");
+                    else {
+                        authTime.setText("Auth TimeOut");
+                        timeoutAuth = true;
+                        clientConnection.disconnect();
+                    }
+                }).start();
+            }
+
+            String l = login.getText();
+            String p = new String(password.getPassword());
+            if(!l.equals("") && !p.equals("")) {
+                clientConnection.auth(l, p);
+                login.setText("");
+                password.setText("");
+            }
+        }
+        else showMessage("Authorization timeout, restart chat");
     }
 
     public void showMessage(String message){
@@ -111,5 +157,16 @@ public class ChatWindow extends JFrame {
     public void switchPanel() {
         authPanel.setVisible(!clientConnection.isAuthorized());
         input.setVisible(clientConnection.isAuthorized());
+    }
+
+    public void showUsersList(String[] users){
+        usersList.setText("");
+        for (String user : users) {
+            usersList.append(user + "\n");
+        }
+    }
+
+    public void setChatTitle(String title){
+        setTitle(title);
     }
 }
