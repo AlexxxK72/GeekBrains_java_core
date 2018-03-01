@@ -14,7 +14,7 @@ public class Main implements iCommands{
             createTable();
             clearTable();
             fillTable();
-            
+
             //ввести команды
             // /price product545
             // /changeprice product10 10000
