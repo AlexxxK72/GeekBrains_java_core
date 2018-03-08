@@ -1,16 +1,22 @@
-public class PrintScanner implements Runnable{
+import java.io.Closeable;
+import java.io.IOException;
+
+public class PrintScanner implements Runnable, Closeable{
     private Q qprint;
     private Q qscan;
+    Thread tWork;
+
 
     public PrintScanner(Q qprint, Q qscan) {
         this.qprint = qprint;
         this.qscan = qscan;
-        new Thread(this).start();
+        tWork = new Thread(this);
+        tWork.start();
     }
 
     @Override
     public void run() {
-        new Thread(new Runnable() {
+        new  Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
@@ -43,5 +49,10 @@ public class PrintScanner implements Runnable{
                 }
             }
         }).start();
+    }
+
+    @Override
+    public void close() throws IOException {
+        tWork.interrupt();
     }
 }
