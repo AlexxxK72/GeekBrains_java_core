@@ -1,6 +1,6 @@
 package lesson1;
 
-public  class methods {
+public  class Methods {
     //Нахождение среднего арифметического массива
     public static double averageArrInt(int ... arr){
        int sum = 0;
