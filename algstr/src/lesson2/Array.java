@@ -1,26 +1,24 @@
 package lesson2;
 
 public class Array {
-    private int[] arr;
+    private int arr[];
     private int size;
-    private int count;
     private boolean isSorted;
 
     private Array() {
         isSorted = false;
-        count = 0;
     }
 
     public Array(int size) {
         this();
         this.size = 0;
-        arr = new int[size];
+        this.arr = new int[size];
     }
 
-    public Array(int... args) { // int[] args = new int[args.length];
+    public Array(int... args) {
         this();
-        size = args.length;
-        arr = args;
+        this.size = args.length;
+        this.arr = args;
     }
 
     public boolean isSorted() {
@@ -59,45 +57,54 @@ public class Array {
         return true;
     }
 
-    // homework
-    //*************************************************************************
-    public boolean delete(int index) {
-        int iMax = size - 1;
-        if (iMax < index || index < 0)
-            return false;
-        while (index < iMax){
-            swap(index, ++index);
-        }
+    boolean remove(int value) {
+        int index = linearFind(value);
+        return index != -1 && delete(index);
+    }
+
+    boolean delete(int index) { // by index
+        if (index >= size || index < 0)
+            throw new ArrayIndexOutOfBoundsException("" + index);
+        System.arraycopy(arr, index + 1, arr, index, size - index - 1);
         size--;
         return true;
     }
 
-    public boolean deleteAll(int value) {
-        boolean isValue = false;
-        for (int i = 0; i < size ; i++) {
-           if(arr[i] == value) {
-               isValue = true;
-               delete(i--);
-           }
-        }
-        return isValue;
-    }
+//    boolean deleteAll(int value) { // by value
+//        boolean success = false;   //O(N^2)
+//        while (remove(value)) {
+//            success = true;
+//        }
+//        return success;
+//    }
 
-    public boolean deleteAll() {
-        size = 0;
-        return true;
-    }
-    //*************************************************************************
-
-    public boolean isInArray(int value) {
+    boolean deleteAll(int value) {
+        boolean success = false;
         for (int i = 0; i < size; i++) {
             if (arr[i] == value) {
-                return true;
+                delete(i);
+                i--;
+                success = true;
             }
         }
-        return false;
+        return success;
     }
-    // k << n == k * 2 ^ n
+
+    void deleteAll() { //clear array
+        size = 0;
+    }
+
+    public int linearFind(int value) {
+        for (int i = 0; i < size; i++) {
+            if (arr[i] == value) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    //mid = low + ((value - arr[low]) * (high - low)) / (arr[high] - arr[low]);
+// k << n == k * 2 ^ n
 // k >> n == k / 2 ^ n
     public int find(int value) {
         if (!isSorted)
@@ -127,37 +134,24 @@ public class Array {
     }
 
     public void sortBubble() {
-        count = 0;
+        boolean flag = false;
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size - 1; j++) {
-                count++;
-                if (arr[j] > arr[j + 1])
+            for (int j = 0; j < size - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
                     swap(j, j + 1);
-
+                    flag = true;
+                }
             }
-        }
-        isSorted = true;
-    }
-
-    public void sortFineBubble() {
-        count = 0;
-        for (int i = size - 1; i >= 1; i--){
-            for (int j = 0; j < i; j++){
-                count++;
-                if(arr[j] > arr[j + 1])
-                    swap(j, j + 1);
-            }
+            if (!flag) break;
         }
         isSorted = true;
     }
 
     public void sortSelect() {
         int f;
-        count = 0;
         for (int i = 0; i < size; i++) {
             f = i;
             for (int j = i + 1; j < size; j++) {
-                count++;
                 if (arr[j] < arr[f])
                     f = j;
             }
@@ -167,12 +161,10 @@ public class Array {
     }
 
     public void sortInsert() {
-        count = 0;
         for (int i = 1; i < size; i++) {
             int temp = arr[i];
             int j = i;
             while (j > 0 && arr[j - 1] >= temp) {
-                count++;
                 arr[j] = arr[j - 1];
                 j--;
             }
@@ -180,11 +172,6 @@ public class Array {
         }
         isSorted = true;
     }
-
-    public String countToString() {
-        return "Кол-во итераций: " + count;
-    }
-
     @Override
     public String toString() {
         int iMax = size - 1;
@@ -199,5 +186,40 @@ public class Array {
                 return b.append(']').toString();
             b.append(", ");
         }
+    }
+
+    int getMax() {
+        if (size == 0) throw new RuntimeException("Empty array");
+        if (size == 1) return arr[0];
+        int r = arr[0];
+        for (int i = 1; i < size; i++) {
+            if (r < arr[i])
+                r = arr[i];
+        }
+        return r;
+    }
+
+    int getMin() {
+        if (size == 0) throw new RuntimeException("Empty array");
+        if (size == 1) return arr[0];
+        int r = arr[0];
+        for (int i = 1; i < size; i++) {
+            if (r > arr[i])
+                r = arr[i];
+        }
+        return r;
+    }
+
+    void pigeon() {
+        int min = getMin();
+        int max = getMax();
+        int[] freq = new int[max - min + 1];
+        for (int i = 0; i < size; i++)
+            freq[arr[i] - min]++;
+
+        int arrIndex = 0;
+        for (int i = 0; i < freq.length; i++)
+            for (int elems = freq[i]; elems > 0; elems--)
+                arr[arrIndex++] = i + min;
     }
 }

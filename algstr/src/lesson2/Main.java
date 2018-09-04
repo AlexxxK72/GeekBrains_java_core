@@ -22,24 +22,24 @@ public class Main {
         System.out.println("SortBubble");
         System.out.println("Сложность O(n^2) " + arr.length() * arr.length());
         System.out.println(arr);
-        System.out.println(arr.countToString());
+        //System.out.println(arr.countToString());
         arr = new Array(5, 7, 10, 4, 25, 30, 4, 1, 2, 4, 4);
-        arr.sortFineBubble();
+        //arr.sortFineBubble();
         System.out.println("SortFineBubble");
         System.out.println("Сложность O(n^2) " + arr.length() * arr.length());
         System.out.println(arr);
-        System.out.println(arr.countToString());
+        //System.out.println(arr.countToString());
         arr = new Array(5, 7, 10, 4, 25, 30, 4, 1, 2, 4, 4);
         arr.sortInsert();
         System.out.println("SortInsert");
         System.out.println("Сложность O(n^2) " + arr.length() * arr.length());
         System.out.println(arr);
-        System.out.println(arr.countToString());
+        //System.out.println(arr.countToString());
         arr = new Array(5, 7, 10, 4, 25, 30, 4, 1, 2, 4, 4);
         arr.sortSelect();
         System.out.println("SortSelect");
         System.out.println("Сложность O(n^2) " + arr.length() * arr.length());
         System.out.println(arr);
-        System.out.println(arr.countToString());
+        //System.out.println(arr.countToString());
     }
 }
