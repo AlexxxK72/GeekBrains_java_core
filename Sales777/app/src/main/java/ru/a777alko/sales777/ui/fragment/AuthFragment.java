@@ -101,18 +101,14 @@ public class AuthFragment extends MvpAppCompatFragment implements AuthView {
     @Override
     public void checkPermission() {
         if (ActivityCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED  ||
-                ActivityCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.READ_PHONE_STATE) &&
-                    ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                            Manifest.permission.CALL_PHONE)) {
+                        Manifest.permission.READ_PHONE_STATE)) {
 
-            } else {
+                } else {
                 ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE},
+                        new String[]{Manifest.permission.READ_PHONE_STATE},
                         PERMISSION_REQUEST_CODE);
             }
         } else {

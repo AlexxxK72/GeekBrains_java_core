@@ -40,13 +40,13 @@ public class TokenRepo {
         repeat = 0;
         this.apiService = apiService;
         this.prefs = prefs;
+    }
+
+    private void init(){
         if (ActivityCompat.checkSelfPermission(App.getInstance(),
                 Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             _uuid = getIMEINumber();
         }
-    }
-
-    private void init(){
         String phone = prefs.getSharedPreferences(PrefsData.PHONE);
         if (phone != null && _uuid != null) {
             _username = "7" + phone;

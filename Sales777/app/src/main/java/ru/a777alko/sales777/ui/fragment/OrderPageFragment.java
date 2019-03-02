@@ -107,7 +107,27 @@ public class OrderPageFragment extends MvpAppCompatFragment implements OrderPage
         btnShot.setOnClickListener(btnChangeStatusListener);
         btnCompleted.setOnClickListener(btnChangeStatusListener);
         btnCallClient.setOnClickListener(v ->
-                presenter.callClient(String.valueOf(txtClientPhone.getText())));
+        {
+            if (ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.CALL_PHONE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.CALL_PHONE)) {
+
+                } else {
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.CALL_PHONE},
+                            PERMISSION_REQUEST_CODE);
+                }
+
+            } else {
+                try {
+                    presenter.callClient(String.valueOf(txtClientPhone.getText()));
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     View.OnClickListener btnChangeStatusListener = v -> {
@@ -155,6 +175,19 @@ public class OrderPageFragment extends MvpAppCompatFragment implements OrderPage
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:+" + phone));
         startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    presenter.callClient(String.valueOf(txtClientPhone.getText()));
+                }
+            }
+        }
     }
 
     @Override
