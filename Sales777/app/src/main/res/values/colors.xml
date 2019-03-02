@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#D32F2F</color>
+    <color name="colorPrimaryDark">#9A0007</color>
+    <color name="colorBlueButton">#678CAF</color>
+    <color name="colorTextPrimary">#ffffff</color>
+    <color name="colorAccent">#FDD835</color>
+    <color name="colorText">#607d8b</color>
+    <color name="colorTextDark">#455A64</color>
+    <color name="colorBackground">#14607d8b</color>
+
+    <color name="statusNew">#c0ffc0</color>
+    <color name="statusAccepted">#ffffc0</color>
+    <color name="statusRejected">#ffc0c0</color>
+    <color name="statusShot">#c0ffff</color>
+</resources>
